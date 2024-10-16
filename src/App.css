@@ -1,38 +1,92 @@
-.App {
-  text-align: center;
+/* esg-frontend/src/App.css */
+
+body, code {
+  font-family: 'Open Sans', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.side-menu {
+  width: 250px; /* Largura inicial */
+  background-color: #052fe9;
+  padding: 20px;
+  border-right: 1px solid #1055cc;
+  height: 100%;
+  position: fixed; /* Fixa o menu na tela */
+  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse */
+  transition: width 0.3s; /* Suaviza a transição de largura */
+  top: 50px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.side-menu:hover {
+  width: 350px; /* Expande ao passar o mouse */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.submenu {
+  width: 250px; /* Largura inicial */
+  transition: width 0.3s; /* Suaviza a transição de largura */
+}
+
+.submenu:hover {
+  width: 350px; /* Expande ao passar o mouse */
+}
+
+.side-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.side-menu li {
+  margin: 10px 0;
+}
+
+.side-menu button {
+  background-color: #007bff;
   color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+.side-menu button:hover {
+  background-color: #0056b3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.css-1vdowym-MuiContainer-root {
+  margin-left: 320px !important;
+  padding: 0 !important; /* Remove o padding para testar o alinhamento */
+}
+
+/* Estilos adicionais para formulários se necessários */
+form div {
+  margin-bottom: 15px;
+}
+
+form input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos de categorias para a tabela Meio Ambiente */
+.category-waste {
+  background-color: #ffdddd; /* Vermelho claro */
+}
+
+.category-energy {
+  background-color: #ddffdd; /* Verde claro */
+}
+
+.category-water {
+  background-color: #ddddff; /* Azul claro */
+}
+
+.category-nature {
+  background-color: #ffffdd; /* Amarelo claro */
+}
+
+.category-carbon-footprint {
+  background-color: #ffddff; /* Roxo claro */
 }
