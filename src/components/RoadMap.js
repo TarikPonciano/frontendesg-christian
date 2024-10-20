@@ -1,7 +1,7 @@
 // esg-frontend/src/components/RoadMap.js
 
 import React, { useState, useEffect } from 'react';
-import { TextField, MenuItem, Select, FormControl, InputLabel, Button, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { TextField, MenuItem, Select, FormControl, InputLabel, Button, Table, TableBody, Box, TableCell, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { getEnvironmentalData, getSocialData, getGovernanceData, getRoadMaps, updateRoadMap, saveRoadMap } from '../services/Api';
 
 const RoadMap = () => {
@@ -138,7 +138,14 @@ const RoadMap = () => {
     setShowForm(true); // Mostra o formulário para adicionar
   };
 
+  const areaStyles = {
+    'Meio Ambiente': { backgroundColor: 'lightgreen' },
+    'Social': { backgroundColor: 'lightblue' },
+    'Governança': { backgroundColor: 'lightcoral' }
+  };
+
   return (
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-right' }}>
     <div>
       <Button variant="contained" color="primary" onClick={addNewRoadMap}>
         Adicionar RoadMap
@@ -162,7 +169,7 @@ const RoadMap = () => {
         </TableHead>
         <TableBody>
           {roadMaps.map((roadMap) => (
-            <TableRow key={roadMap.id}>
+            <TableRow key={roadMap.id} sx={areaStyles[roadMap.area] || { backgroundColor: 'none' }}>
               <TableCell>{roadMap.plano}</TableCell>
               <TableCell>{roadMap.categoria}</TableCell>
               <TableCell>{roadMap.area}</TableCell>
@@ -311,6 +318,7 @@ const RoadMap = () => {
         </DialogActions>
       </Dialog>
     </div>
+    </Box>
   );
 };
 

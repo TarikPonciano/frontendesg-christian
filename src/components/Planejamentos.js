@@ -188,7 +188,7 @@ const Planejamento = () => {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
       <Typography variant="h4" gutterBottom>Planejamento</Typography>
       <Button
         variant="contained"
@@ -288,6 +288,13 @@ const Planejamento = () => {
                       value={editChanges[item.id]?.indicador || item.indicador}
                       onChange={(e) => handleInputChange(e, 'indicador', item.id)}
                       fullWidth
+                      displayEmpty
+                      renderValue={selected => {
+                        if (selected === '') {
+                          return <em>Selecione um indicador</em>;
+                        }
+                        return selected;
+                      }}
                     >
                       {indicadores.map((indicador) => (
                         <MenuItem key={indicador.id} value={indicador.nomeindicador}>

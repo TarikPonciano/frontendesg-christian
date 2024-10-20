@@ -33,27 +33,33 @@ const LoginForm = ({ setAuth }) => {
             const data = await response.json();
 
             if (response.ok) {
-                const { token, name, role, empresa_id, empresa_name } = data;
-                if (token && name && role && empresa_id && empresa_name) {
+                const { token, name, role, empresa_id, empresa_name, plano } = data;
+                if (token && name && role && empresa_id && empresa_name && plano) {
+                    console.log('Login bem-sucedido, salvando dados no localStorage:', data);
                     localStorage.setItem('token', token);
                     localStorage.setItem('user', JSON.stringify({
                         name,
                         role,
                         empresa_id,
                         empresa_name,
+                        plano
                     }));
-                    setAuth(true);
-                    navigate('/analiseesg');
+                    setAuth(true); // Atualiza o estado de autenticação
+                    // Redireciona para a página inicial e recarrega a página
+                    navigate('/analiseesg', { replace: true });
+                    window.location.reload(); // Recarrega a página para garantir que todos os componentes sejam atualizados com os novos dados
                 } else {
+                    console.error('Erro no login: dados incompletos recebidos:', data);
                     alert('Erro no login: dados incompletos recebidos.');
                 }
             } else {
+                console.error('Erro ao tentar fazer login:', data.msg);
                 alert(data.msg || 'Erro no login.');
             }
-        } catch (error) {
-            console.error('Erro ao fazer login:', error);
-            alert('Erro ao fazer login: ' + error.message);
-        }
+            } catch (error) {
+                console.error('Erro ao fazer login:', error);
+                alert('Erro ao fazer login: ' + error.message);
+            }
     };
 
     return (

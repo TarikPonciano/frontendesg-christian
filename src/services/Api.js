@@ -830,21 +830,22 @@ export const getRelatorioAcoes = async () => {
 };
 
 // Função para registrar uma empresa e usuário
-export const registerCompanyAndUser = async (email, password, role, name, empresa_name) => {
+export const registerCompanyAndUser = async (email, password, role, name, empresa, plano) => {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/criarempresa`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: JSON.stringify({ email, password, role, name, empresa_name }),  // empresa_name deve corresponder ao campo esperado pelo backend
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ email, password, role, name, empresa_name: empresa, plano }) // Ajuste aqui se necessário
     });
+  
     if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Falha ao registrar:', errorData);
-        throw new Error(`Falha ao registrar. Detalhes: ${errorData}`);
+      const errorData = await response.text();
+      console.error('Falha ao registrar:', errorData);
+      throw new Error(`Falha ao registrar. Detalhes: ${errorData}`);
     }
     return await response.json();
-};
+  };
 
 // Função para obter todas as empresas
 export const getEmpresas = async () => {
@@ -891,4 +892,57 @@ export const updatePermissoesEmpresa = async (empresaId, permissoes) => {
         throw new Error(`Erro ao atualizar permissões da empresa: ${response.statusText}`);
     }
     return await response.json();
+};
+
+// Atualizar dados da empresa
+export const updateCompanyAndUser = async (userId, data) => {
+    const { email, password, role, name, empresa, plano } = data;
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/criarempresa/updateUsuario/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,  // Assumindo que você usa autenticação por token
+        },
+        body: JSON.stringify({ email, password, role, name, empresa, plano })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Erro ao atualizar usuário e empresa: ${errorData.message}`);
+    }
+
+    return await response.json();
+};
+
+// Função para deletar um usuário e sua empresa associada
+export const deleteUserAndCompany = async (userId) => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/criarempresa/usuarios/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+
+        // Checa se a resposta é JSON antes de tentar analisá-la como JSON
+        const contentType = response.headers.get('Content-Type');
+        if (!response.ok) {
+            if (contentType && contentType.includes('application/json')) {
+                const errorDetails = await response.json();
+                throw new Error(`Erro ao deletar usuário: ${errorDetails.message}`);
+            } else {
+                // Trata resposta não-JSON (possivelmente HTML)
+                const errorText = await response.text();
+                throw new Error(`Erro ao deletar usuário: Resposta inesperada do servidor: ${errorText}`);
+            }
+        }
+
+        return await response.json(); // Processa a resposta como JSON apenas se a resposta foi ok e é JSON
+    } catch (error) {
+        console.error('Erro ao deletar usuário:', error);
+        throw error; // Propaga o erro para ser tratado pelo chamador
+    }
 };

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getRelatorioESG } from '../services/Api';
-import { Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, TableBody, Paper, Box } from '@mui/material';
 
 const RelatorioESG = () => {
   const [relatorios, setRelatorios] = useState([]);
@@ -21,6 +21,7 @@ const RelatorioESG = () => {
   }, []);
 
   return (
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-right' }}>
     <Paper elevation={4} style={{ margin: '20px', overflowX: 'auto' }}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
@@ -35,7 +36,15 @@ const RelatorioESG = () => {
         </TableHead>
         <TableBody>
           {relatorios.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow
+              key={index} 
+              sx={{
+                // Aplica a cor de fundo baseada no valor de item.eixo
+                backgroundColor: item.eixo === 'Ambiental' ? 'lightgreen' :
+                                item.eixo === 'Social' ? 'lightblue' :
+                                item.eixo === 'Governança' ? 'lightcoral' : 'none',
+              }}
+              >
               <TableCell>{item.tema}</TableCell>
               <TableCell>{item.eixo}</TableCell>
               <TableCell>{`${item.percentual_acoes}%`}</TableCell>
@@ -47,6 +56,7 @@ const RelatorioESG = () => {
         </TableBody>
       </Table>
     </Paper>
+    </Box>
   );
 };
 

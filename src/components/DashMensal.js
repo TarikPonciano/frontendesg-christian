@@ -37,20 +37,13 @@ const DashMensal = () => {
 
     const generateChartData = (indicatorId) => {
         const indicatorData = data.find(ind => ind.indicador === indicatorId);
-        console.log("Dados do indicador selecionado:", indicatorData); // Log para verificar os dados processados
-
         if (!indicatorData) {
             return { labels: [], datasets: [] };
         }
-
         const months = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
                         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         const metaData = months.map(month => indicatorData[`meta_${month.toLowerCase()}`]);
         const resultadoData = months.map(month => indicatorData[`resultado_${month.toLowerCase()}`]);
-
-        console.log("Dados do gráfico - Meta:", metaData);
-        console.log("Dados do gráfico - Realizado:", resultadoData);
-
         return {
             labels: months,
             datasets: [{

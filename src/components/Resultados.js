@@ -162,7 +162,7 @@ const Resultados = () => {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
       <Typography variant="h4" gutterBottom>
         Resultados
       </Typography>

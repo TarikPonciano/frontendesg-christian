@@ -1,7 +1,7 @@
 // esg-frontend/src/components/RelatorioAcoes.js
 
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from '@mui/material';
 import { getRelatorioAcoes } from '../services/Api';
 
 const RelatorioAcoes = () => {
@@ -74,6 +74,7 @@ const RelatorioAcoes = () => {
   const grandTotal = calculateTotals(categories.flatMap(cat => cat.subcategories));
 
   return (
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-right' }}>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -90,40 +91,40 @@ const RelatorioAcoes = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {categories.map((category) => {
-            const categoryTotals = calculateTotals(category.subcategories);
-            return [
-              <TableRow key={category.name}>
-                <TableCell component="th" scope="row" style={{ backgroundColor: category.color, fontWeight: 700 }}>
-                  {category.name}
-                </TableCell>
-                <TableCell align="center">{categoryTotals.planosDeAcao}</TableCell>
-                <TableCell align="center">{categoryTotals.naoIniciado}</TableCell>
-                <TableCell align="center">{categoryTotals.emAndamento}</TableCell>
-                <TableCell align="center">{categoryTotals.atrasado}</TableCell>
-                <TableCell align="center">{categoryTotals.concluido}</TableCell>
-                <TableCell align="center">{formatCurrency(categoryTotals.gastoPlanejado)}</TableCell>
-                <TableCell align="center">{formatCurrency(categoryTotals.gastoRealizado)}</TableCell>
-                <TableCell align="center">{formatCurrency(categoryTotals.diferenca)}</TableCell>
-              </TableRow>,
-              ...category.subcategories.map((sub) => {
-                const data = relatorioData.find(item => item.categoria === sub) || {};
-                return (
-                  <TableRow key={sub}>
-                    <TableCell style={{ paddingLeft: "20px" }}>{sub}</TableCell>
-                    <TableCell align="center">{data.planosDeAcao || 0}</TableCell>
-                    <TableCell align="center">{data.naoIniciado || 0}</TableCell>
-                    <TableCell align="center">{data.emAndamento || 0}</TableCell>
-                    <TableCell align="center">{data.atrasado || 0}</TableCell>
-                    <TableCell align="center">{data.concluido || 0}</TableCell>
-                    <TableCell align="center">{formatCurrency(data.gastoPlanejado)}</TableCell>
-                    <TableCell align="center">{formatCurrency(data.gastoRealizado)}</TableCell>
-                    <TableCell align="center">{formatCurrency(data.diferenca)}</TableCell>
-                  </TableRow>
-                );
-              })
-            ];
-          })}
+        {categories.map((category) => {
+          const categoryTotals = calculateTotals(category.subcategories);
+          return [
+            <TableRow key={category.name} sx={{ backgroundColor: category.color }}>
+              <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>
+                {category.name}
+              </TableCell>
+              <TableCell align="center">{categoryTotals.planosDeAcao}</TableCell>
+              <TableCell align="center">{categoryTotals.naoIniciado}</TableCell>
+              <TableCell align="center">{categoryTotals.emAndamento}</TableCell>
+              <TableCell align="center">{categoryTotals.atrasado}</TableCell>
+              <TableCell align="center">{categoryTotals.concluido}</TableCell>
+              <TableCell align="center">{formatCurrency(categoryTotals.gastoPlanejado)}</TableCell>
+              <TableCell align="center">{formatCurrency(categoryTotals.gastoRealizado)}</TableCell>
+              <TableCell align="center">{formatCurrency(categoryTotals.diferenca)}</TableCell>
+            </TableRow>,
+            ...category.subcategories.map((sub) => {
+              const data = relatorioData.find(item => item.categoria === sub) || {};
+              return (
+                <TableRow key={sub} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell style={{ paddingLeft: "20px" }}>{sub}</TableCell>
+                  <TableCell align="center">{data.planosDeAcao || 0}</TableCell>
+                  <TableCell align="center">{data.naoIniciado || 0}</TableCell>
+                  <TableCell align="center">{data.emAndamento || 0}</TableCell>
+                  <TableCell align="center">{data.atrasado || 0}</TableCell>
+                  <TableCell align="center">{data.concluido || 0}</TableCell>
+                  <TableCell align="center">{formatCurrency(data.gastoPlanejado)}</TableCell>
+                  <TableCell align="center">{formatCurrency(data.gastoRealizado)}</TableCell>
+                  <TableCell align="center">{formatCurrency(data.diferenca)}</TableCell>
+                </TableRow>
+              );
+            })
+          ];
+        })}
           <TableRow key="Grand Total">
             <TableCell component="th" scope="row" style={{ fontWeight: 700 }}>Total Geral</TableCell>
             <TableCell align="center">{grandTotal.planosDeAcao}</TableCell>
@@ -138,6 +139,7 @@ const RelatorioAcoes = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </Box>
   );
 };
 

@@ -1,13 +1,11 @@
 // esg-frontend/src/components/ABNTContent.js
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Container, Grid } from '@mui/material';
+import { Typography, Container, Box } from '@mui/material';
 import { getABNTInfo } from '../services/Api';
 
 const ABNTContent = () => {
-    const [data, setData] = useState([]);  // Armazena os dados da ABNT
-    const navigate = useNavigate();
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,28 +20,40 @@ const ABNTContent = () => {
         fetchData();
     }, []);
 
+    const getBackgroundColor = (eixo) => {
+        switch (eixo) {
+            case 'Ambiental': return 'lightgreen';
+            case 'Social': return 'lightblue';
+            case 'Governança': return 'lightcoral';  // Certifique-se de que este valor está correto.
+            default: return 'none';
+        }
+    };
+
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Typography variant="h4" gutterBottom>
+        <Container maxWidth="lg" sx={{ mt: 4, ml: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-center' }}>
+            <Typography variant="h4" gutterBottom sx={{ fontSize: '2.5rem' }}>
                 ABNT PR 2030 - Informações
             </Typography>
-            <Button variant="contained" color="primary" onClick={() => navigate('/')} sx={{ mb: 2 }}>
-                Voltar ao Início
-            </Button>
             {data.length > 0 ? (
-                <Grid container spacing={2}>
-                    <Grid item xs={4}><Typography variant="h6">Temas</Typography></Grid>
-                    <Grid item xs={4}><Typography variant="h6">Eixo</Typography></Grid>
-                    <Grid item xs={4}><Typography variant="h6">Informações</Typography></Grid>
+                <Box sx={{ width: '100%', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
+                    <Typography variant="h6" component="div" sx={{ backgroundColor: 'lightgray', p: 1, textAlign: 'center' }}>Temas</Typography>
+                    <Typography variant="h6" component="div" sx={{ backgroundColor: 'lightgray', p: 1, textAlign: 'center' }}>Eixo</Typography>
+                    <Typography variant="h6" component="div" sx={{ backgroundColor: 'lightgray', p: 1, textAlign: 'center' }}>Informações</Typography>
 
                     {data.map((item, index) => (
                         <React.Fragment key={index}>
-                            <Grid item xs={4}><Typography variant="body1">{item.temas}</Typography></Grid>
-                            <Grid item xs={4}><Typography variant="body1">{item.eixo}</Typography></Grid>
-                            <Grid item xs={4}><Typography variant="body1">{item.informacoes}</Typography></Grid>
+                            <Box sx={{ backgroundColor: getBackgroundColor(item.eixo), p: 1, textAlign: 'center' }}>
+                                <Typography variant="body1">{item.temas}</Typography>
+                            </Box>
+                            <Box sx={{ backgroundColor: getBackgroundColor(item.eixo), p: 1, textAlign: 'center' }}>
+                                <Typography variant="body1">{item.eixo}</Typography>
+                            </Box>
+                            <Box sx={{ backgroundColor: 'lightgray', p: 1, textAlign: 'center' }}>
+                                <Typography variant="body1">{item.informacoes}</Typography>
+                            </Box>
                         </React.Fragment>
                     ))}
-                </Grid>
+                </Box>
             ) : (
                 <Typography variant="body1">Carregando informações ou nenhuma informação disponível.</Typography>
             )}

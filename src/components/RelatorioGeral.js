@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getRelatorioGeral } from '../services/Api';
-import { Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, TableBody, Paper, Box } from '@mui/material';
 
 const RelatorioGeral = () => {
   const [relatorios, setRelatorios] = useState([]);
@@ -36,6 +36,7 @@ const RelatorioGeral = () => {
   };
 
   return (
+    <Box sx={{ padding: 3, mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'flex-right' }}>
     <Paper elevation={4} style={{ margin: '20px', overflowX: 'auto' }}>
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
@@ -54,7 +55,15 @@ const RelatorioGeral = () => {
         </TableHead>
         <TableBody>
           {relatorios.map((item, index) => (
-            <TableRow key={index}>
+            <TableRow 
+              key={index} 
+              sx={{
+                // Aplica a cor de fundo baseada no valor de item.eixo
+                backgroundColor: item.eixo === 'Ambiental' ? 'lightgreen' :
+                                item.eixo === 'Social' ? 'lightblue' :
+                                item.eixo === 'Governança' ? 'lightcoral' : 'none',
+              }}
+              >
               <TableCell>{item.indicador}</TableCell>
               <TableCell>{item.tipo}</TableCell>
               <TableCell>{item.eixo}</TableCell>
@@ -70,6 +79,7 @@ const RelatorioGeral = () => {
         </TableBody>
       </Table>
     </Paper>
+  </Box>
   );
 };
 
